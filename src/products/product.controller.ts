@@ -1,16 +1,13 @@
 import { Request, Response } from "express";
+import { ProductService } from "./product.service"
 
 export class ProductController {
     constructor(
-
+        private readonly service: ProductService
     ) {}
 
     async list(req: Request, res: Response) {
-        const products = [
-            {"name": "bola", "price": 12.2},
-            {"name": "boneco", "price": 20.0},
-            {"name": "pião", "price": 5},
-        ];
+        const products = await this.service.list();
 
         res.json(products);
     }
