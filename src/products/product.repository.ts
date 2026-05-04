@@ -1,9 +1,9 @@
 import { Database } from "../database/postgres";
-import { IProductRow, ListProductsInput } from "./product.types";
+import { IProductRow, ListProductQuery } from "./product.types";
 import { Product } from "./product";
 
 export interface IProductRepository {
-    list(input: ListProductsInput): Promise<Product[]>;
+    search(input: ListProductQuery): Promise<Product[]>;
     create(product: Product): Promise<Product>;
     findById(id: string): Promise<Product | null>;
     remove(id: string): Promise<boolean>;
@@ -28,7 +28,7 @@ export class ProductRepository implements IProductRepository{
         );
     }
 
-    async list(input: ListProductsInput): Promise<Product[]> {
+    async search(input: ListProductQuery): Promise<Product[]> {
         const { name, minPrice, maxPrice, page, limit } = input;
 
         const conditions: string[] = ["active = true"];
