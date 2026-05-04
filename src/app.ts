@@ -3,9 +3,9 @@ import { loadDatabaseConfig } from "./util/load-env";
 import { ProductRepository } from "./products/product.repository";
 import { ProductController } from "./products/product.controller"
 import { ProductService } from "./products/product.service"
-import { CustomerRepository } from "./customer/customer.repository";
-import { CustomerService } from "./customer/customer.service";
-import { CustomerController } from "./customer/customer.controller";
+import { CustomerRepository } from "./customers/customer.repository";
+import { CustomerService } from "./customers/customer.service";
+import { CustomerController } from "./customers/customer.controller";
 
 export function createApp() {
     const database = new Database(loadDatabaseConfig());
