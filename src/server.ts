@@ -1,5 +1,5 @@
 import { createApp } from "./app";
-import { productRoutes } from "./routes";
+import { customerRoutes, productRoutes } from "./routes";
 import express from "express";
 import 'dotenv/config';
 
@@ -9,6 +9,7 @@ const server = express()
 server.use(express.json())
 
 server.use("/products", productRoutes(app.productController))
+server.use("/customers", customerRoutes(app.customerController))
 
 server.listen(process.env.PORT, () => {
     console.log(`Servidor rodando em http://localhost:${process.env.PORT}`);
