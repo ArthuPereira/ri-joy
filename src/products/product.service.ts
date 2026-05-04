@@ -1,6 +1,6 @@
 import { Product } from "./product";
 import { IProductRepository } from "./product.repository";
-import { CreateProductDTO, ListProductsInput, UpdateProductDTO } from "./product.types";
+import { CreateProductDTO, ListProductQuery, UpdateProductDTO } from "./product.types";
 import { randomUUID } from "crypto";
 
 export class ProductService {
@@ -8,8 +8,8 @@ export class ProductService {
         private readonly repo: IProductRepository
     ) {}
 
-    async list(input: ListProductsInput): Promise<Product[]> {
-        const { minPrice, maxPrice, page, limit } = input;
+    async search(query: ListProductQuery): Promise<Product[]> {
+        const { minPrice, maxPrice, page, limit } = query;
 
         if (minPrice !== undefined && maxPrice !== undefined && minPrice > maxPrice) {
             throw new Error("minPrice não pode ser maior que maxPrice");
@@ -23,7 +23,7 @@ export class ProductService {
             throw new Error("limit deve ser entre 1 e 100");
         }
         
-        return await this.repo.list(input);
+        return await this.repo.search(query);
     }
 
     async create(dto: CreateProductDTO): Promise<Product> {      
