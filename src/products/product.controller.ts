@@ -77,6 +77,10 @@ export class ProductController {
 
     async delete(req: Request<{ id: string }>, res: Response) {
         const { id } = req.params;
+    
+        if (!validate(id)) {
+            return res.status(400).json({ message: "ID é obrigatório" });
+        }
 
         const deleted = await this.service.remove(id);
 
