@@ -6,6 +6,8 @@ import 'dotenv/config';
 const app = createApp()
 const server = express()
 
+server.use(express.json())
+
 server.use("/products", productRoutes(app.productController))
 
 server.listen(process.env.PORT, () => {
