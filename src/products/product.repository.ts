@@ -1,11 +1,12 @@
-import { Database } from "../database/postgres";
-import { IProductRow, ListProductQuery } from "./product.types";
+import { Database, QueryExecutor } from "../database/postgres";
+import { ProductRow, ListProductQuery } from "./product.types";
 import { Product } from "./product";
 
 export interface IProductRepository {
     search(input: ListProductQuery): Promise<Product[]>;
     create(product: Product): Promise<Product>;
     findById(id: string): Promise<Product | null>;
+    findByIds(ids: string[], client?: QueryExecutor): Promise<Product[]>;
     remove(id: string): Promise<boolean>;
     update(product: Product): Promise<Product | null>;
     existsBySku(sku: string): Promise<boolean>;
@@ -17,7 +18,7 @@ export class ProductRepository implements IProductRepository{
         private readonly db: Database
     ) {}
 
-    private toDomain(row: IProductRow): Product {
+    private toDomain(row: ProductRow): Product {
         return new Product(
             row.id,
             row.name,
@@ -73,13 +74,13 @@ export class ProductRepository implements IProductRepository{
             OFFSET $${offsetIndex}
         `;
 
-        const products = await this.db.query<IProductRow>(query, values);
+        const products = await this.db.query<ProductRow>(query, values);
 
         return products.rows.map(row => this.toDomain(row))
     }
 
     async create(product: Product): Promise<Product> {
-        const result = await this.db.query<IProductRow>(
+        const result = await this.db.query<ProductRow>(
             `
             INSERT INTO products (
                 id,
@@ -106,7 +107,7 @@ export class ProductRepository implements IProductRepository{
     }
 
     async findById(id: string): Promise<Product | null> {
-        const result = await this.db.query<IProductRow>(
+        const result = await this.db.query<ProductRow>(
             `
             SELECT *
             FROM products
@@ -122,6 +123,26 @@ export class ProductRepository implements IProductRepository{
         }
 
         return this.toDomain(result.rows[0]);
+    }
+
+    async findByIds(ids: string[], client?: QueryExecutor): Promise<Product[]> {
+        if (ids.length === 0) {
+            return [];
+        }
+
+        const executor = client ?? this.db;
+
+        const result = await executor.query<ProductRow>(
+            `
+            SELECT *
+            FROM products
+            WHERE id = ANY($1)
+            AND active = true
+            `,
+            [ids]
+        );
+
+        return result.rows.map(row => this.toDomain(row));
     }
 
     async existsBySku(sku: string): Promise<boolean> {
@@ -140,7 +161,7 @@ export class ProductRepository implements IProductRepository{
     }
 
     async findBySku(sku: string): Promise<Product | null> {
-        const result = await this.db.query<IProductRow>(
+        const result = await this.db.query<ProductRow>(
             `
             SELECT *
             FROM products
