@@ -15,8 +15,32 @@ export class SkuAlreadyExistsError extends AppError {
 }
 
 export class ProductUpdateFailedError extends AppError {
-    readonly statusCode = 400;
+    readonly statusCode = 500;
     constructor() {
         super("Falha ao atualizar produto");
+    }
+}
+
+export class InvalidPriceRangeError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("minPrice não pode ser maior que maxPrice ");
+    }
+}
+
+export class InvalidPageError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("page deve ser maior que 0");
+    }
+}
+
+export class InvalidLimitError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("limit deve ser entre 1 e 100");
     }
 }
