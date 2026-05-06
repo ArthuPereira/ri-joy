@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ProductService } from "./product.service"
-import { CreateProductDTO, createProductSchema, idParamSchema, ListProductQuery, listProductSchema, UpdateProductDTO, updateProductSchema } from "./product.types";
+import { CreateProductDTO, createProductSchema, idParamSchema, ListProductQuery, listProductSchema, UpdateProductDTO, updateProductSchema, UuidParam } from "./product.types";
 
 export class ProductController {
     constructor(
@@ -29,7 +29,7 @@ export class ProductController {
         }
     }
 
-    async show(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+    async show(req: Request<UuidParam>, res: Response, next: NextFunction) {
         try {
             const { params } = idParamSchema.parse({ params: req.params });
             const product = await this.service.show(params.id);
@@ -44,7 +44,7 @@ export class ProductController {
         }
     }
 
-    async delete(req: Request<{ id: string }>, res: Response, next: NextFunction) {
+    async delete(req: Request<UuidParam>, res: Response, next: NextFunction) {
         try {
             const { params } = idParamSchema.parse({ params: req.params });
             const deleted = await this.service.remove(params.id);
@@ -59,7 +59,7 @@ export class ProductController {
         }
     }
 
-    async update(req: Request<{ id: string }, {}, UpdateProductDTO>, res: Response, next: NextFunction) {
+    async update(req: Request<UuidParam, {}, UpdateProductDTO>, res: Response, next: NextFunction) {
         try {
             const { params, body } = updateProductSchema.parse({
                 params: req.params,
