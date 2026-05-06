@@ -59,3 +59,12 @@ export interface IProductRow {
   sku: string;
   active: boolean;
 }
+
+export interface ProductResponseDTO {
+  id: string;
+  name: string;
+  price: number;
+  sku: string;
+  description: string | null;
+  thumbnailUrl: string | null;
+}

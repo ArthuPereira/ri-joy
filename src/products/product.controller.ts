@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { ProductService } from "./product.service"
 import { CreateProductDTO, createProductSchema, idParamSchema, ListProductQuery, listProductSchema, UpdateProductDTO, updateProductSchema, UuidParam } from "./product.types";
+import { ProductMapper } from "./product.mapper";
 
 export class ProductController {
     constructor(
@@ -12,7 +13,7 @@ export class ProductController {
             const { query } = listProductSchema.parse({ query: req.query });
             const products = await this.service.search(query);
 
-            res.status(200).json(products);
+            res.status(200).json(ProductMapper.toResponseList(products));
         } catch (err) {
             next(err);
         }
@@ -23,7 +24,7 @@ export class ProductController {
             const { body } = createProductSchema.parse({ body: req.body });
             const product = await this.service.create(body);
 
-            res.status(201).json(product);
+            res.status(201).json(ProductMapper.toResponse(product));
         } catch (err) {
             next(err);
         }
@@ -34,7 +35,7 @@ export class ProductController {
             const { params } = idParamSchema.parse({ params: req.params });
             const product = await this.service.show(params.id);
 
-            res.status(200).json(product);
+            res.status(200).json(ProductMapper.toResponse(product));
         } catch (err) {
             next(err);
         }
@@ -60,7 +61,7 @@ export class ProductController {
 
             const updated = await this.service.update(params.id, body);
 
-            res.status(200).json(updated);
+            res.status(200).json(ProductMapper.toResponse(updated));
         } catch (err) {
             next(err);
         }
