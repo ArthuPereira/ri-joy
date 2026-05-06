@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import { AppError } from "../errors/domain";
 
 export function errorMiddleware(
   err: unknown,
@@ -20,8 +21,10 @@ export function errorMiddleware(
     return;
   }
 
-  if (err instanceof Error) {
-    res.status(400).json({ error: err.message });
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({
+      error: err.message,
+    });
     return;
   }
 
