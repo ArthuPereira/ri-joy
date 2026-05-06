@@ -21,6 +21,22 @@ export class ProductUpdateFailedError extends AppError {
     }
 }
 
+export class ProductNameRequiredError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("Produto deve ter nome");
+    }
+}
+
+export class ProductPriceInvalidError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("Produto deve ter preço válido");
+    }
+}
+
 export class InvalidPriceRangeError extends AppError {
     readonly statusCode = 400;
 
