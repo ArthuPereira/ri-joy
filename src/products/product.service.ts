@@ -1,3 +1,4 @@
+import { InvalidLimitError, InvalidPageError, InvalidPriceRangeError, ProductNotFoundError, ProductUpdateFailedError, SkuAlreadyExistsError } from "../errors/product.errors";
 import { Product } from "./product";
 import { IProductRepository } from "./product.repository";
 import { CreateProductDTO, ListProductQuery, UpdateProductDTO } from "./product.types";
@@ -12,15 +13,15 @@ export class ProductService {
         const { minPrice, maxPrice, page, limit } = query;
 
         if (minPrice !== undefined && maxPrice !== undefined && minPrice > maxPrice) {
-            throw new Error("minPrice não pode ser maior que maxPrice");
+            throw new InvalidPriceRangeError();
         }
 
         if (page < 1) {
-            throw new Error("page deve ser maior que 0");
+            throw new InvalidPageError();
         }
 
         if (limit < 1 || limit > 100) {
-            throw new Error("limit deve ser entre 1 e 100");
+            throw new InvalidLimitError();
         }
         
         return await this.repo.search(query);
@@ -30,7 +31,7 @@ export class ProductService {
         const existSku = await this.repo.existsBySku(dto.sku);
 
         if (existSku) {
-            throw new Error("SKU já cadastrado");
+            throw new SkuAlreadyExistsError();
         }  
 
         const product = new Product(
@@ -45,32 +46,33 @@ export class ProductService {
         return this.repo.create(product);
     }
 
-    async show(id: string): Promise<Product | null> {
+    async show(id: string): Promise<Product> {
         const product = await this.repo.findById(id);
 
         if (!product) {
-            throw new Error("Produto inexistente");
+            throw new ProductNotFoundError();
         }
 
         return product;
     }
 
-    async remove(id: string): Promise<boolean> {
-        return await this.repo.remove(id);
+    async remove(id: string): Promise<void> {
+        await this.show(id);
+        await this.repo.remove(id);
     }
 
     async update(id: string, data: UpdateProductDTO): Promise<Product> {
         const product = await this.repo.findById(id);
 
         if (!product) {
-            throw new Error("Produto inexistente");
+            throw new ProductNotFoundError();
         }
 
         const updated = product.update(data);
         const result = await this.repo.update(updated);
 
         if (!result) {
-            throw new Error("Falha ao atualizar");
+            throw new ProductUpdateFailedError();
         }
 
         return result;
