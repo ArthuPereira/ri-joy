@@ -1,3 +1,4 @@
+import { ProductNameRequiredError, ProductPriceInvalidError, SkuAlreadyExistsError } from "../errors/product.errors";
 import { UpdateProductDTO } from "./product.types";
 
 export class Product {
@@ -10,15 +11,15 @@ export class Product {
         public readonly description: string | null = null
   ) {
         if (!name) {
-            throw new Error('Produto deve ter nome');
+            throw new ProductNameRequiredError();
         }
 
         if (price <= 0) {
-            throw new Error('Produto deve ter preço');
+            throw new ProductPriceInvalidError();
         }
 
         if (!sku) {
-            throw new Error('SKU é obrigatório');
+            throw new SkuAlreadyExistsError();
         }
     }
 
