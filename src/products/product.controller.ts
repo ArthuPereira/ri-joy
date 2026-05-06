@@ -34,10 +34,6 @@ export class ProductController {
             const { params } = idParamSchema.parse({ params: req.params });
             const product = await this.service.show(params.id);
 
-            if (!product) {
-                throw new Error("Produto não encontrado");
-            }
-
             res.status(200).json(product);
         } catch (err) {
             next(err);
@@ -47,11 +43,7 @@ export class ProductController {
     async delete(req: Request<UuidParam>, res: Response, next: NextFunction) {
         try {
             const { params } = idParamSchema.parse({ params: req.params });
-            const deleted = await this.service.remove(params.id);
-
-            if (!deleted) {
-                throw new Error("Produto não encontrado");
-            }
+            await this.service.remove(params.id);
 
             res.status(204).send();
         } catch (err) {
@@ -67,10 +59,6 @@ export class ProductController {
             });
 
             const updated = await this.service.update(params.id, body);
-
-            if (!updated) {
-                throw new Error("Produto não encontrado");
-            }
 
             res.status(200).json(updated);
         } catch (err) {
