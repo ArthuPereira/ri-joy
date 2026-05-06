@@ -1,5 +1,12 @@
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg"
 
+export interface QueryExecutor {
+    query<T extends QueryResultRow = any>(
+        sql: string,
+        params?: any[]
+    ): Promise<QueryResult<T>>;
+}
+
 export type DatabaseConfig = {
   host: string;
   port: number;
@@ -45,7 +52,7 @@ export class Database {
     }
 
     async transaction<T>(
-        fn: (client: PoolClient) => Promise<T>
+        fn: (client: QueryExecutor) => Promise<T>
     ): Promise<T> {
         const client = await this.getClient();
 
