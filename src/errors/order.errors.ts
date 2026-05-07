@@ -16,6 +16,13 @@ export class OrderProductNotFoundError extends AppError {
     }
 }
 
+export class OrderNotFoundError extends AppError {
+    readonly statusCode = 404;
+
+    constructor() {
+        super("Pedido não encontrado");
+    }
+}
 
 export class OrderItemIdRequiredError extends AppError {
     readonly statusCode = 400;

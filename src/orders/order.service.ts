@@ -4,9 +4,9 @@ import { ProductRepository } from "../products/product.repository";
 import { OrderItemRepository } from "./items/order-item.repository";
 import { Order } from "./order";
 import { OrderRepository } from "./order.repository";
-import { CreateOrderDTO, OrderStatus } from "./order.types";
+import { CreateOrderDTO, OrderStatus, OrderSummary } from "./order.types";
 import { OrderItem } from "./items/order-item";
-import { OrderItemsRequiredError, OrderProductNotFoundError } from "../errors/order.errors";
+import { OrderItemsRequiredError, OrderNotFoundError, OrderProductNotFoundError } from "../errors/order.errors";
 
 export class OrderService {
     constructor(
@@ -63,5 +63,37 @@ export class OrderService {
 
             return order;
         });
+    }
+
+    async getOrderById(orderId: string): Promise<Order> {
+        const order = await this.orderRepository.findById(orderId);
+
+        if (!order) {
+            throw new OrderNotFoundError();
+        }
+
+        const items = await this.orderItemRepository.findManyByOrderId(orderId);
+
+        items.forEach(item => order.addItem(item));
+
+        return order;
+    }
+
+    async getOrdersByCustomer(customerId: string): Promise<OrderSummary[]> {
+        return this.orderRepository.findByCustomer(customerId);
+    }
+
+    async updateOrderStatus(orderId: string, status: OrderStatus): Promise<Order> {
+        const order = await this.orderRepository.findById(orderId);
+
+        if (!order) {
+            throw new OrderNotFoundError();
+        }
+
+        order.status = status;
+
+        await this.orderRepository.updateStatus(orderId, status);
+
+        return order;
     }
 }

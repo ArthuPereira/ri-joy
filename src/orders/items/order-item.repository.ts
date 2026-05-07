@@ -4,7 +4,9 @@ import { QueryExecutor } from "../../database/postgres";
 import { OrderItemRow } from "./order-item.types";
 
 export interface IOrderItemRepository {
-  createMany(items: readonly OrderItem[], client: QueryExecutor): Promise<void>;
+    createMany(items: readonly OrderItem[], client: QueryExecutor): Promise<void>;
+    findManyByOrderId(orderId: string): Promise<OrderItem[]>;
+    findManyByConsumerId(consumerId: string): Promise<OrderItem[]>;
 }
 
 export class OrderItemRepository implements IOrderItemRepository {
@@ -65,5 +67,31 @@ export class OrderItemRepository implements IOrderItemRepository {
             VALUES ${placeholders.join(", ")}
             `, values
         );
+    }
+
+    async findManyByOrderId(orderId: string): Promise<OrderItem[]> {
+        const result = await this.db.query<OrderItemRow>(
+            `
+            SELECT *
+            FROM order_items
+            WHERE order_id = $1
+            `,
+            [orderId]
+        );
+
+        return result.rows.map(row => this.toDomain(row));
+    }
+
+    async findManyByConsumerId(consumerId: string): Promise<OrderItem[]> {
+        const result = await this.db.query<OrderItemRow>(
+            `
+            SELECT *
+            FROM order_items
+            WHERE consumer_id = $1
+            `,
+            [consumerId]
+        );
+
+        return result.rows.map(row => this.toDomain(row));
     }
 }

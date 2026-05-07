@@ -1,6 +1,7 @@
 import { Database, QueryExecutor } from "../database/postgres";
 import { Order } from "./order";
-import { OrderRow, OrderStatus } from "./order.types";
+import { OrderRow, OrderStatus, OrderSummary } from "./order.types";
+import { OrderMapper } from "./order.mapper";
 
 export interface IOrderRepository {
   create(order: Order, client?: QueryExecutor): Promise<Order>;
@@ -12,15 +13,6 @@ export class OrderRepository {
     constructor(
         private readonly db: Database,
     ) {}
-
-    private toDomain(row: OrderRow): Order {
-        return new Order(
-            row.id,
-            row.customer_id,
-            row.status,
-            row.created_at
-        );
-    }
 
     async create(
         order: Order,
@@ -48,7 +40,7 @@ export class OrderRepository {
             ]
         );
 
-        return this.toDomain(result.rows[0]);
+        return OrderMapper.toDomain(result.rows[0]);
     }
 
     async findById(id: string): Promise<Order | null> {
@@ -66,7 +58,26 @@ export class OrderRepository {
             return null;
         }
 
-        return this.toDomain(result.rows[0]);
+        return OrderMapper.toDomain(result.rows[0]);
+    }
+
+    async findByCustomer(customerId: string): Promise<OrderSummary[]> {
+        const orders = await this.db.query<OrderRow>(
+            `
+            SELECT 
+                id, 
+                customer_id, 
+                status,
+                total,
+                created_at
+            FROM orders
+            WHERE customer_id = $1
+            ORDER BY created_at DESC
+            `,
+            [customerId]
+        );
+
+        return orders.rows.map(row => OrderMapper.toSummary(row));
     }
 
     async updateStatus(
@@ -88,6 +99,6 @@ export class OrderRepository {
             return null;
         }
 
-        return this.toDomain(result.rows[0]);
+        return OrderMapper.toDomain(result.rows[0]);
     }
 }

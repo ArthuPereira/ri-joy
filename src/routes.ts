@@ -30,6 +30,9 @@ export function orderRoutes(controller: OrderController) {
     const router = Router();
 
     router.post("/", controller.create.bind(controller));
+    router.get("/:id", controller.getOrderById.bind(controller));
+    router.get("/customer/:id", controller.getOrdersByCustomer.bind(controller));
+    router.patch("/:id/status", controller.updateOrderStatus.bind(controller));
 
     return router;
 };
