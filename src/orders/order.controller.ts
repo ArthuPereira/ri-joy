@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { OrderService } from "./order.service";
 import { OrderMapper } from "./order.mapper";
-import { CreateOrderDTO, createOrderSchema } from "./order.types";
+import { CreateOrderDTO, createOrderSchema, updateOrderStatusSchema, UpdateOrderStatusDTO } from "./order.types";
+import { idParamSchema, UuidParam } from "../products/product.types";
 
 export class OrderController {
     constructor(
@@ -16,6 +17,45 @@ export class OrderController {
             res.status(201).json(OrderMapper.toResponse(order));
         } catch (err) {
             next(err);
+        }
+    }
+
+    async getOrderById(req: Request<UuidParam>, res: Response, next: NextFunction) {
+        try {
+            const { params } = idParamSchema.parse({ params: req.params });
+
+            const order = await this.service.getOrderById(params.id);
+
+            res.status(200).json(OrderMapper.toResponse(order));
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async getOrdersByCustomer(req: Request<UuidParam>, res: Response, next: NextFunction) {
+        try {
+            const { params } = idParamSchema.parse({ params: req.params });
+
+            const orders = await this.service.getOrdersByCustomer(params.id);
+
+            res.status(200).json(orders);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async updateOrderStatus(req: Request<UuidParam, {}, UpdateOrderStatusDTO>, res: Response, next: NextFunction) {
+        try {
+            const { params, body } = updateOrderStatusSchema.parse({
+                params: req.params,
+                body: req.body,
+            });
+
+            const order = await this.service.updateOrderStatus(params.id, body.status);
+
+            res.status(200).json(OrderMapper.toResponse(order));
+        } catch (err) {
+            next(err)
         }
     }
 }
