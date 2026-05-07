@@ -51,11 +51,20 @@ export type CreateProductDTO = z.infer<typeof createProductSchema>["body"];
 export type UpdateProductDTO = z.infer<typeof updateProductSchema>["body"];
 export type UuidParam = z.infer<typeof idParamSchema>["params"];
 
-export interface IProductRow {
+export interface ProductRow {
   id: string;
   name: string;
   price: number;
   description: string | null;
   sku: string;
   active: boolean;
+}
+
+export interface ProductResponseDTO {
+  id: string;
+  name: string;
+  price: number;
+  sku: string;
+  description: string | null;
+  thumbnailUrl: string | null;
 }

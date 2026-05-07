@@ -1,5 +1,12 @@
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg"
 
+export interface QueryExecutor {
+    query<T extends QueryResultRow = any>(
+        sql: string,
+        params?: any[]
+    ): Promise<QueryResult<T>>;
+}
+
 export type DatabaseConfig = {
   host: string;
   port: number;
@@ -41,6 +48,26 @@ export class Database {
     async close(): Promise<void> {
         if (this.pool) {
             await this.pool.end();
+        }
+    }
+
+    async transaction<T>(
+        fn: (client: QueryExecutor) => Promise<T>
+    ): Promise<T> {
+        const client = await this.getClient();
+
+        try {
+            await client.query("BEGIN");
+
+            const result = await fn(client);
+
+            await client.query("COMMIT");
+            return result;
+        } catch (error) {
+            await client.query("ROLLBACK");
+            throw error;
+        } finally {
+            client.release();
         }
     }
 }
