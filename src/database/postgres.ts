@@ -7,27 +7,15 @@ export interface QueryExecutor {
     ): Promise<QueryResult<T>>;
 }
 
-export type DatabaseConfig = {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  database: string;
-};
-
 export class Database {
     private pool?: Pool;
 
-    constructor(private readonly config: DatabaseConfig) {}
+    constructor() {}
 
     private getPool(): Pool {
         if (!this.pool) {
             this.pool = new Pool({
-                host: this.config.host,
-                port: this.config.port,
-                user: this.config.user,
-                password: this.config.password,
-                database: this.config.database
+                connectionString: process.env.DATABASE_URL
             });
         }
 
