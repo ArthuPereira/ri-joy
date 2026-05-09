@@ -1,6 +1,6 @@
-import { Database } from "../../database/postgres";
+import { Database } from "../../infra/database/postgres";
 import { OrderItem } from "./order-item";
-import { QueryExecutor } from "../../database/postgres";
+import { QueryExecutor } from "../../infra/database/postgres";
 import { OrderItemRow } from "./order-item.types";
 
 export interface IOrderItemRepository {
