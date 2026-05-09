@@ -1,4 +1,4 @@
-import { Database } from "../database/postgres";
+import { Database } from "../infra/database/postgres";
 import { Customer } from "./customer";
 import { ICustomeRow, SearchCustomersInput } from "./customer.types";
 

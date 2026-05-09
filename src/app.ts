@@ -1,4 +1,4 @@
-import { Database } from "./database/postgres"
+import { Database } from "./infra/database/postgres"
 import { ProductRepository } from "./products/product.repository";
 import { ProductController } from "./products/product.controller"
 import { ProductService } from "./products/product.service"

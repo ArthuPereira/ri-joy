@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { Database } from "../database/postgres";
+import { Database } from "../infra/database/postgres";
 import { ProductRepository } from "../products/product.repository";
 import { OrderItemRepository } from "./items/order-item.repository";
 import { Order } from "./order";

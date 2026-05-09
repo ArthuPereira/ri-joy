@@ -1,4 +1,4 @@
-import { Database, QueryExecutor } from "../database/postgres";
+import { Database, QueryExecutor } from "../infra/database/postgres";
 import { Order } from "./order";
 import { OrderRow, OrderStatus, OrderSummary } from "./order.types";
 import { OrderMapper } from "./order.mapper";
