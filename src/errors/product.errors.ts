@@ -60,3 +60,43 @@ export class InvalidLimitError extends AppError {
         super("limit deve ser entre 1 e 100");
     }
 }
+
+export class FileRequiredError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("Arquivo é obrigatório");
+    }
+}
+
+export class InvalidImageMimeTypeError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("Arquivo deve ser uma imagem (ex: jpg / png)");
+    }
+}
+
+export class InvalidImageExtensionError extends AppError {
+    readonly statusCode = 400;
+
+    constructor() {
+        super("Extensão de imagem inválida");
+    }
+}
+
+export class ProductImageNotFoundError extends AppError {
+    readonly statusCode = 404;
+
+    constructor() {
+        super("Imagem não encontrada");
+    }
+}
+
+export class ProductImageUnauthorizedError extends AppError {
+    readonly statusCode = 403;
+
+    constructor() {
+        super("Imagem não pertence ao produto");
+    }
+}

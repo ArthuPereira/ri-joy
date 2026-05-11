@@ -1,5 +1,5 @@
 import z from "zod";
-import { idParamSchema } from "../products/product.types";
+import { uuidParamSchema } from "../products/product.types";
 
 const orderItemSchema = z.object({
   productId: z.string().uuid("productId inválido"),
@@ -23,7 +23,7 @@ export enum OrderStatus {
 }
 
 export const updateOrderStatusSchema = z.object({
-  params: idParamSchema.shape.params,
+  params: uuidParamSchema,
   body: z.object({
       status: z.nativeEnum(OrderStatus),
   }),

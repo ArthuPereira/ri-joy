@@ -66,21 +66,20 @@ export async function seedDb() {
 
       // product_images
       const imageId = randomUUID();
-      const imageUrl = `${process.env.S3_ENDPOINT}/${process.env.S3_BUCKET}/${product.imageKey}`;
+      const contentType = "image/jpeg"
       await client.query(
         `
         INSERT INTO product_images (
-          id, product_id, image_url
+          id, product_id, storage_key, content_type
         ) VALUES (
-          $1,
-          $2,
-          $3
+          $1, $2, $3, $4
         )
         `,
         [
           imageId,
           product.id,
-          imageUrl
+          product.imageKey,
+          contentType
         ]
       );
     }

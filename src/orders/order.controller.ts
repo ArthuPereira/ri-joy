@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { OrderService } from "./order.service";
 import { OrderMapper } from "./order.mapper";
 import { CreateOrderDTO, createOrderSchema, updateOrderStatusSchema, UpdateOrderStatusDTO } from "./order.types";
-import { idParamSchema, UuidParam } from "../products/product.types";
+import { UuidParam, uuidParamSchema } from "../products/product.types";
 
 export class OrderController {
     constructor(
@@ -22,7 +22,7 @@ export class OrderController {
 
     async getOrderById(req: Request<UuidParam>, res: Response, next: NextFunction) {
         try {
-            const { params } = idParamSchema.parse({ params: req.params });
+            const params = uuidParamSchema.parse(req.params);
 
             const order = await this.service.getOrderById(params.id);
 
@@ -34,7 +34,7 @@ export class OrderController {
 
     async getOrdersByCustomer(req: Request<UuidParam>, res: Response, next: NextFunction) {
         try {
-            const { params } = idParamSchema.parse({ params: req.params });
+            const params = uuidParamSchema.parse(req.params);
 
             const orders = await this.service.getOrdersByCustomer(params.id);
 

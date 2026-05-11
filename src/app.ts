@@ -9,16 +9,24 @@ import { OrderRepository } from "./orders/order.repository";
 import { OrderService } from "./orders/order.service";
 import { OrderController } from "./orders/order.controller";
 import { OrderItemRepository } from "./orders/items/order-item.repository";
+import { ProductImageRepository } from "./products/images/product-image.repository";
+import { S3StorageService } from "./infra/storage/storage.service";
 
 export function createApp() {
     const database = new Database();
+    const storage = new S3StorageService();
 
     const productRepository = new ProductRepository(database);
     const customerRepository = new CustomerRepository(database);
     const orderRepository = new OrderRepository(database);
     const orderItemRepository = new OrderItemRepository(database);
+    const productImagesRepository = new ProductImageRepository(database);
 
-    const productService = new ProductService(productRepository);
+    const productService = new ProductService(
+        productRepository,
+        productImagesRepository,
+        storage
+    );
     const customerService = new CustomerService(customerRepository);
     const orderService = new OrderService(
         orderRepository,
