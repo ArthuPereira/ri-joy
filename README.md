@@ -310,6 +310,8 @@ docker compose down
 docker rmi postgres localstack/localstack
 ~~~
 
+*Nota: existem algumas opções mais leves do que o locastack, como o própio ministack, que foi até 6 vezes menor em meus testes. Mas isso já foi em outro momento, fora da produção. No mais reconheço a melhoria possível de desempenho.*
+
 ---
 
 ## [Considerações finais](#sumário)
