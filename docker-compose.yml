@@ -4,11 +4,16 @@ services:
     ports: 
       - 5432:5432
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_USER: ri_joy_user
+      POSTGRES_PASSWORD: ri_joy_password
+      POSTGRES_DB: ri_joy
 
-volumes:
-  postgres_data:
+  localstack:
+    image: localstack/localstack:3.4.0
+    ports:
+      - 4566:4566
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test

@@ -1,5 +1,4 @@
-import { Database } from "./database/postgres"
-import { loadDatabaseConfig } from "./util/load-env";
+import { Database } from "./infra/database/postgres"
 import { ProductRepository } from "./products/product.repository";
 import { ProductController } from "./products/product.controller"
 import { ProductService } from "./products/product.service"
@@ -12,7 +11,7 @@ import { OrderController } from "./orders/order.controller";
 import { OrderItemRepository } from "./orders/items/order-item.repository";
 
 export function createApp() {
-    const database = new Database(loadDatabaseConfig());
+    const database = new Database();
 
     const productRepository = new ProductRepository(database);
     const customerRepository = new CustomerRepository(database);

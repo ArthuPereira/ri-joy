@@ -1,4 +1,4 @@
-import { Database, QueryExecutor } from "../database/postgres";
+import { Database, QueryExecutor } from "../infra/database/postgres";
 import { ProductRow, ListProductQuery } from "./product.types";
 import { Product } from "./product";
 
