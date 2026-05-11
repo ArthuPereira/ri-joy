@@ -7,7 +7,7 @@ export class OrderMapper {
             id: order.id,
             customerId: order.customerId,
             status: order.status,
-            total: order.total,
+            total: Number(order.total.toFixed(2)),
             createdAt: order.createdAt,
             items: order.items.map(item => ({
                 productId: item.productId,
@@ -23,7 +23,7 @@ export class OrderMapper {
             id: row.id,
             customerId: row.customer_id,
             status: row.status,
-            total: Number(row.total),
+            total: Number(row.total.toFixed(2)),
             createdAt: row.created_at,
         };
     }
