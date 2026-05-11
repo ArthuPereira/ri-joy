@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "dotenv -e .env tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "seed": "dotenv -e .env tsx src/seeds/seed.ts"
   },
   "keywords": [],
   "author": "",
