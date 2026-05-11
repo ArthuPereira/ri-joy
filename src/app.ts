@@ -25,6 +25,7 @@ export function createApp() {
     const productService = new ProductService(
         productRepository,
         productImagesRepository,
+        storage
     );
     const customerService = new CustomerService(customerRepository);
     const orderService = new OrderService(

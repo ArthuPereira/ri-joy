@@ -1,5 +1,5 @@
 import { ProductNameRequiredError, ProductPriceInvalidError, SkuAlreadyExistsError } from "../errors/product.errors";
-import { UpdateProductDTO } from "./product.types";
+import { ProductImage, UpdateProductDTO } from "./product.types";
 
 export class Product {
     constructor(
@@ -8,8 +8,9 @@ export class Product {
         public readonly price: number,
         public readonly sku: string,
         public readonly active: boolean = true,
-        public readonly description: string | null = null
-  ) {
+        public readonly description: string | null = null,
+        public readonly images: ProductImage[] = []
+    ) {
         if (!name) {
             throw new ProductNameRequiredError();
         }
@@ -24,13 +25,25 @@ export class Product {
     }
 
     update(data: UpdateProductDTO): Product {
+        const name = data.name ?? this.name;
+        const price = data.price ?? this.price;
+
+        if (name.length === 0) {
+            throw new ProductNameRequiredError();
+        }
+
+        if (price <= 0) {
+            throw new ProductPriceInvalidError();
+        }
+
         return new Product(
             this.id,
-            data.name ?? this.name,
-            data.price ?? this.price,
+            name,
+            price,
             this.sku,
             this.active,
-            data.description !== undefined ? data.description : this.description
+            data.description ?? this.description,
+            this.images
         );
     }
 }
