@@ -1,0 +1,1 @@
+ALTER TABLE public.customers ADD active bool NOT NULL;
