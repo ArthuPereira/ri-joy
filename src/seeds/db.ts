@@ -36,11 +36,11 @@ export const products = [
   },
   {
     id: randomUUID(),
-    name: "Carrinho Infantil Colorido",
+    name: "Pista Ataque do tubarão",
     price: 44.9,
     sku: "INF-BRQ-03",
-    imageKey: "products/carrinho-colorido.jpg",
-    fileName: "carrinho-colorido.jpg",
+    imageKey: "products/ataque-tubarão.jpg",
+    fileName: "pista-carrinho.jpg",
   },
 ];
 
