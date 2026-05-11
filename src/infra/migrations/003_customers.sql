@@ -1,0 +1,8 @@
+CREATE TABLE customers (
+  id UUID PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  cpf VARCHAR(20),
+  phone VARCHAR(20),
+  created_at TIMESTAMP NOT NULL DEFAULT now()
+);
