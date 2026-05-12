@@ -39,9 +39,14 @@ export class S3StorageService implements StorageService {
             ResponseContentType: contentType,
         });
 
-        return getSignedUrl(s3Client, command, {
+        const signedUrl = await getSignedUrl(s3Client, command, {
             expiresIn: 60 * 5, // 5 minutos
         });
+
+        return signedUrl.replace(
+            process.env.S3_INTERNAL_ENDPOINT!,
+            process.env.S3_PUBLIC_ENDPOINT!
+        );
     }
 
     async delete(key: string): Promise<string> {
