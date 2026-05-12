@@ -19,7 +19,7 @@ Cria um novo pedido.
 
 ### Retorno `201 Created`
 
-```json
+~~~json
 {
   "id": "uuid",
   "customerId": "uuid",
@@ -35,7 +35,7 @@ Cria um novo pedido.
     }
   ]
 }
-```
+~~~
 
 ### Erros
 
@@ -47,14 +47,14 @@ Cria um novo pedido.
 
 ### Exemplos
 
-```bash
-http POST localhost:3000/orders \
+~~~bash
+http POST localhost/api/orders \
   customerId="uuid-do-cliente" \
   items:='[
     {"productId":"uuid-do-produto","quantity":2},
     {"productId":"uuid-do-produto-2","quantity":1}
   ]'
-```
+~~~
 
 ---
 
@@ -70,7 +70,7 @@ Busca um pedido pelo ID, incluindo seus itens.
 
 ### Retorno `200 OK`
 
-```json
+~~~json
 {
   "id": "uuid",
   "customerId": "uuid",
@@ -86,7 +86,7 @@ Busca um pedido pelo ID, incluindo seus itens.
     }
   ]
 }
-```
+~~~
 
 ### Erros
 
@@ -97,9 +97,9 @@ Busca um pedido pelo ID, incluindo seus itens.
 
 ### Exemplos
 
-```bash
-http GET localhost:3000/orders/:uuid
-```
+~~~bash
+http GET localhost/api/orders/:uuid
+~~~
 
 ---
 
@@ -115,7 +115,7 @@ Lista todos os pedidos de um cliente.
 
 ### Retorno `200 OK`
 
-```json
+~~~json
 [
   {
     "id": "uuid",
@@ -125,7 +125,7 @@ Lista todos os pedidos de um cliente.
     "createdAt": "date"
   }
 ]
-```
+~~~
 
 ### Erros
 
@@ -135,9 +135,9 @@ Lista todos os pedidos de um cliente.
 
 ### Exemplos
 
-```bash
-http GET localhost:3000/orders/customer/:uuid
-```
+~~~bash
+http GET localhost/api/orders/customer/:uuid
+~~~
 
 ---
 
@@ -177,7 +177,7 @@ Retorna o pedido atualizado no mesmo formato do `GET /orders/:id` (com `items`).
 
 ### Exemplos
 
-```bash
-http PATCH localhost:3000/orders/:uuid/status \
+~~~bash
+http PATCH localhost/api/orders/:uuid/status \
   status="PAID"
-```
+~~~

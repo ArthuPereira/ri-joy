@@ -13,7 +13,7 @@ Lista clientes com filtros opcionais.
 
 ### Retorno `200 OK`
 
-```json
+~~~json
 [
   {
     "id": "uuid",
@@ -24,7 +24,7 @@ Lista clientes com filtros opcionais.
     "active": "bool"
   }
 ]
-```
+~~~
 
 ### Erros
 
@@ -37,19 +37,19 @@ Lista clientes com filtros opcionais.
 
 ### Exemplos
 
-```bash
+~~~bash
 # Listar todos os clientes
-http GET localhost:3000/customers
+http GET localhost/api/customers
 
 # Filtrar por nome
-http GET localhost:3000/customers name==maria
+http GET localhost/api/customers name==maria
 
 # Filtrar por email
-http GET localhost:3000/customers email==maria@email.com
+http GET localhost/api/customers email==maria@email.com
 
 # Paginação
-http GET localhost:3000/customers page==2 limit==10
-```
+http GET localhost/api/customers page==2 limit==10
+~~~
 
 ---
 
@@ -74,7 +74,7 @@ Cria um novo cliente.
 
 ### Retorno `201 Created`
 
-```json
+~~~json
 {
   "id": "uuid",
   "name": "string",
@@ -83,7 +83,7 @@ Cria um novo cliente.
   "cpf": "string",
   "active": "bool"
 }
-```
+~~~
 
 ### Erros
 
@@ -94,13 +94,13 @@ Cria um novo cliente.
 
 ### Exemplos
 
-```bash
-http POST localhost:3000/customers \
+~~~bash
+http POST localhost/api/customers \
   name="Maria Silva" \
   email="maria@email.com" \
   phone="85999990000" \
   cpf="00000000000"
-```
+~~~
 
 ---
 
@@ -135,10 +135,10 @@ Retorna o cliente atualizado no mesmo formato do `GET /customers`.
 
 ### Exemplos
 
-```bash
-http PATCH localhost:3000/customers/:uuid \
+~~~bash
+http PATCH localhost/api/customers/:uuid \
   phone="85988880000"
-```
+~~~
 
 ---
 
@@ -156,6 +156,6 @@ Remove um cliente.
 
 ### Exemplos
 
-```bash
-http DELETE localhost:3000/customers/:uuid
-```
+~~~bash
+http DELETE localhost/api/customers/:uuid
+~~~

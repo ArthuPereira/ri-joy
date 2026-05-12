@@ -71,6 +71,8 @@ Controller  →  Service  →  Repository  →  PostgreSQL
 .
 ├── docker-compose.yml          # PostgreSQL + LocalStack (produção/avaliação)
 ├── docker-compose.dev.yml      # Ambiente de desenvolvimento
+├── Dockerfile                  # Builda a api em uma imagem docker
+├── .dockerignore               # Arquivos que não vão para a imagem
 ├── docs/                       # Exemplos de requisições (Httpie)
 │    ├── products.md
 │    ├── customers.md
@@ -142,51 +144,31 @@ O esquema é aplicado via migrações SQL versionadas, executadas em ordem:
 ### 1. Clone o repositório
 
 ~~~bash
-git clone https://github.com/seu-usuario/ri-joy-api.git
+git clone https://github.com/ArthuPereira/ri-joy-api.git
 cd ri-joy-api
 ~~~
 
-### 2. Instale as dependências
+### 2. Suba a infraestrutura (PostgreSQL + LocalStack + Nginx + Imagem da api)
 
 ~~~bash
-npm install
+docker compose up --build -d
 ~~~
 
-### 3. Suba a infraestrutura (PostgreSQL + LocalStack)
+### 3. Execute as migrations
 
 ~~~bash
-# Ambiente padrão (recomendado)
-docker compose up -d
-
-# ou de desenvolvimento
-docker compose -f docker-compose.dev.yml up -d
+docker compose exec api npm run migrate
 ~~~
 
-### 4. Execute as migrações
+### 4. Popule o banco com dados de exemplo
 
 ~~~bash
-npm run migrate
-~~~
-
-### 5. (Opcional) Popule o banco com dados de exemplo
-
-~~~bash
-npm run seed
+docker compose exec api npm run seed
 ~~~
 
 > O seed cria produtos com imagens reais (brinquedos e roupas infantis) armazenadas no bucket S3 local via LocalStack.
 
-### 6. Inicie o servidor
-
-~~~bash
-# Desenvolvimento (com hot reload)
-npm run dev
-
-# Produção
-npm run build && npm start
-~~~
-
-O servidor estará disponível em `http://localhost:3000`.
+O servidor estará disponível em `http://localhost/api`.
 
 ---
 
@@ -242,7 +224,7 @@ O diretório `docs/` contém todos os comandos organizados por domínio (`produc
 **1. Crie um produto**
 
 ~~~bash
-http POST localhost:3000/products \
+http POST localhost/api/products \
   name="Carrinho de Controle Remoto" \
   sku="CAR-REM-001" \
   price:=90.00 \
@@ -254,16 +236,16 @@ Guarde o `id` retornado — ele será o `productId` nos próximos passos.
 **2. Envie uma imagem para o produto**
 
 ~~~bash
-http -f POST localhost:3000/products/:productId/images \
+http -f POST localhost/api/products/:productId/images \
   image@./src/seeds/assets/pista-carrinho.jpg
 ~~~
 
-A resposta incluirá uma `url` apontando para o bucket local. Abra o link no navegador para ver a imagem servida pelo LocalStack.
+A resposta incluirá uma `url` apontando para o bucket local. Abra o link no navegador para ver a imagem servida pelo LocalStack :)
 
 **3. Crie um cliente**
 
 ~~~bash
-http POST localhost:3000/customers \
+http POST localhost/api/customers \
   name="Maria Silva" \
   email="maria@email.com" \
   phone="85999990000" \
@@ -275,7 +257,7 @@ Guarde o `id` retornado — ele será o `customerId` no pedido.
 **4. Crie um pedido**
 
 ~~~bash
-http POST localhost:3000/orders \
+http POST localhost/api/orders \
   customerId=":customerId" \
   items:='[{"productId":":productId","quantity":2}]'
 ~~~
@@ -283,7 +265,7 @@ http POST localhost:3000/orders \
 **5. Marque o pedido como pago**
 
 ~~~bash
-http PATCH localhost:3000/orders/:orderId/status \
+http PATCH localhost/api/orders/:orderId/status \
   status="PAID"
 ~~~
 
@@ -306,8 +288,12 @@ http PATCH localhost:3000/orders/:orderId/status \
 Após testar, para remover as imagens do PostgreSQL e do LocalStack baixadas pelo Docker:
 
 ~~~bash
-docker compose down
-docker rmi postgres localstack/localstack
+docker compose down -v
+docker rmi postgres:15-alpine \
+  localstack/localstack:3.4.0 \
+  node:22-alpine \
+  nginx:alpine \
+  ri-joy-api:latest
 ~~~
 
 *Nota: existem algumas opções mais leves do que o locastack, como o própio ministack, que foi até 6 vezes menor em meus testes. Mas isso já foi em outro momento, fora da produção. No mais reconheço a melhoria possível de desempenho.*

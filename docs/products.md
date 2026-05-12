@@ -14,7 +14,7 @@ Lista produtos com filtros opcionais. Retorna uma lista paginada.
 
 ### Retorno `200 OK`
 
-```json
+~~~json
 [
   {
     "id": "uuid",
@@ -22,33 +22,33 @@ Lista produtos com filtros opcionais. Retorna uma lista paginada.
     "sku": "string",
     "price": "number",
     "description": "string",
-    "thumbnailUrl": "http://localhost:4566/products-images/products/...",
+    "thumbnailUrl": "http://localhost/s3/products-images/products/...",
     "images": [
       {
         "id": "uuid",
-        "url": "http://localhost:4566/products-images/products/...",
+        "url": "http://localhost/s3/products-images/products/...",
         "createdAt": "date"
       }
     ]
   }
 ]
-```
+~~~
 
 ### Exemplos
 
-```bash
+~~~bash
 # Listar todos os produtos
-http GET localhost:3000/products
+http GET localhost/api/products
 
 # Filtrar por nome
-http GET localhost:3000/products name==vestido
+http GET localhost/api/products name==vestido
 
 # Filtrar por faixa de preço
-http GET localhost:3000/products minPrice==40.0 maxPrice==50.0
+http GET localhost/api/products minPrice==40.0 maxPrice==50.0
 
 # Paginação
-http GET localhost:3000/products page==2 limit==10
-```
+http GET localhost/api/products page==2 limit==10
+~~~
 
 ---
 
@@ -64,7 +64,7 @@ Busca um produto pelo ID.
 
 ### Retorno `200 OK`
 
-```json
+~~~json
 {
   "id": "uuid",
   "name": "string",
@@ -72,22 +72,22 @@ Busca um produto pelo ID.
   "price": "number",
   "description": "string",
   "active": "bool",
-  "thumbnailUrl": "http://localhost:4566/products-images/products/...",
+  "thumbnailUrl": "http://localhost/s3/products-images/products/...",
   "images": [
     {
       "id": "uuid",
-      "url": "http://localhost:4566/products-images/products/...",
+      "url": "http://localhost/s3/products-images/products/...",
       "createdAt": "date"
     }
   ]
 }
-```
+~~~
 
 ### Exemplos
 
-```bash
-http GET localhost:3000/products/:uuid
-```
+~~~bash
+http GET localhost/api/products/:uuid
+~~~
 
 ---
 
@@ -112,7 +112,7 @@ Cria um novo produto sem imagem atribuída.
 
 ### Retorno `201 Created`
 
-```json
+~~~json
 {
   "id": "uuid",
   "name": "string",
@@ -122,17 +122,17 @@ Cria um novo produto sem imagem atribuída.
   "active": "bool",
   "images": []
 }
-```
+~~~
 
 ### Exemplos
 
-```bash
-http POST localhost:3000/products \
+~~~bash
+http POST localhost/api/products \
   name="Carrinho de Controle Remoto" \
   sku="CAR-REM-001" \
   price:=90.00 \
   description="Carrinho RC com alcance de 20 metros"
-```
+~~~
 
 ---
 
@@ -167,11 +167,11 @@ Retorna o produto atualizado no mesmo formato do `GET /products/:id`.
 
 ### Exemplos
 
-```bash
-http PATCH localhost:3000/products/:uuid \
+~~~bash
+http PATCH localhost/api/products/:uuid \
   price:=85.00 \
   description="Carrinho RC com alcance de 30 metros e luzes LED"
-```
+~~~
 
 ---
 
@@ -189,9 +189,9 @@ Remove um produto.
 
 ### Exemplos
 
-```bash
-http DELETE localhost:3000/products/:uuid
-```
+~~~bash
+http DELETE localhost/api/products/:uuid
+~~~
 
 ---
 
@@ -219,20 +219,20 @@ Faz upload de uma imagem e a associa ao produto. A primeira imagem enviada se to
 
 ### Retorno `201 Created`
 
-```json
+~~~json
 {
   "id": "uuid",
-  "url": "http://localhost:4566/products-images/products/...",
+  "url": "http://localhost/s3/products-images/products/...",
   "createdAt": "date"
 }
-```
+~~~
 
 ### Exemplos
 
-```bash
-http -f POST localhost:3000/products/:uuid/images \
+~~~bash
+http -f POST localhost/api/products/:uuid/images \
   image@./src/seeds/assets/pista-carrinho.jpg
-```
+~~~
 
 ---
 
@@ -248,21 +248,21 @@ Lista todas as imagens de um produto.
 
 ### Retorno `200 OK`
 
-```json
+~~~json
 [
   {
     "id": "uuid",
-    "url": "http://localhost:4566/products-images/products/...",
+    "url": "http://localhost/s3/products-images/products/...",
     "createdAt": "date"
   }
 ]
-```
+~~~
 
 ### Exemplos
 
-```bash
-http GET localhost:3000/products/:uuid/images
-```
+~~~bash
+http GET localhost/api/products/:uuid/images
+~~~
 
 ---
 
@@ -281,6 +281,6 @@ Remove uma imagem específica de um produto.
 
 ### Exemplos
 
-```bash
-http DELETE localhost:3000/products/:productId/images/:imageId
-```
+~~~bash
+http DELETE localhost/api/products/:productId/images/:imageId
+~~~
